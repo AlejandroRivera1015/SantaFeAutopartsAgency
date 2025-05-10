@@ -12,6 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Embeddable
 public class Item {
-    private Product productId;
+    private Long productId;
     private Long quantity;
 }
