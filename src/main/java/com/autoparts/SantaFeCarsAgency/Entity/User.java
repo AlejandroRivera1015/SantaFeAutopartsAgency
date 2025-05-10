@@ -21,8 +21,9 @@ public class User {
     private String password;
     private String phone;
     private String address;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    private Character role;
 
 }
