@@ -20,10 +20,10 @@ public class UserServiceImpl implements  UserService {
         Optional<User> user = userRepository.findByEmailAndPassword(email, password);
 
         if(user.isPresent()){
-            return new UserDTO(user.get().getId(), user.get().getName());
+            return new UserDTO(user.get().getId(), user.get().getName(), user.get().getRole());
         }
         else {
-            return new UserDTO(0L, "User not found");
+            return new UserDTO(0L, "User not found", '0');
         }
     }catch (Exception e){
         System.out.println("Error searching user / userServiceImpl: " + e.getMessage());
