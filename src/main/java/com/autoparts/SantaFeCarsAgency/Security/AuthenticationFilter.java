@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-public class AuthenticationFIlter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     JwtUtil jwtUtil;
