@@ -19,7 +19,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToOne
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Cart  cart;
     private Double totalPrice;
     private Boolean isPaid;
