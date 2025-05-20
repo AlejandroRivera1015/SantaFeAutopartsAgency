@@ -27,8 +27,5 @@ public class Order {
     private Boolean isReady;
     private String orderDate;
     private String deliveryDate;
-
-
-
-
+    private String deliveryAddress;
 }
