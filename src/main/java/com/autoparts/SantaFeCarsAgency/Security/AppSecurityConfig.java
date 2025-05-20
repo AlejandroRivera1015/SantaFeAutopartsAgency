@@ -1,5 +1,6 @@
 package com.autoparts.SantaFeCarsAgency.Security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,8 @@ import java.util.List;
 @EnableWebSecurity
 public class AppSecurityConfig  {
 
+    @Autowired
+    AuthenticationFilter authenticationFilter;
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
@@ -23,8 +26,10 @@ public class AppSecurityConfig  {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/order/**").hasAnyAuthority("a","c")
+                        .requestMatchers("/product/**").hasAnyAuthority("a","p")
                         .anyRequest().authenticated())
-                .addFilterBefore(new AuthenticationFIlter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
