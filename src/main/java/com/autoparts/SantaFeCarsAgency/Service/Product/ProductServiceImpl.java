@@ -146,10 +146,14 @@ public class ProductServiceImpl  implements ProductService {
     }
 
     @Override
-    public Boolean deleteProduct(Long id) {
+    public Boolean deleteProduct(Long prooductId) {
         try {
-            productRepository.deleteById(id);
-            return true;
+            Optional<Product> product = productRepository.findById(prooductId);
+            if (product.isPresent()) {
+                productRepository.delete(product.get());
+            }
+            return  product.isPresent();
+
         } catch (Exception e) {
             System.out.println("Error deleting product: " + e.getMessage());
             return false;
