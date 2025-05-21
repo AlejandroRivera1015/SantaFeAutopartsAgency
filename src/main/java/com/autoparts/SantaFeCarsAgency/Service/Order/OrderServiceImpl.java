@@ -7,11 +7,9 @@ import com.autoparts.SantaFeCarsAgency.Entity.Order;
 import com.autoparts.SantaFeCarsAgency.Entity.User;
 import com.autoparts.SantaFeCarsAgency.Exceptions.Product.AvailableProductException;
 import com.autoparts.SantaFeCarsAgency.Exceptions.Product.OutOfStockException;
-import com.autoparts.SantaFeCarsAgency.Repository.Cart.CartRepository;
 import com.autoparts.SantaFeCarsAgency.Repository.Order.OrderRepository;
 import com.autoparts.SantaFeCarsAgency.Repository.User.UserRepository;
 import com.autoparts.SantaFeCarsAgency.Service.Product.ProductServiceImpl;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +22,6 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    CartRepository cartRepository;
-
-    @Autowired
     OrderRepository orderRepository;
 
     @Autowired
@@ -36,7 +31,6 @@ public class OrderServiceImpl implements OrderService {
     ProductServiceImpl productService;
 
     @Override
-    @Transactional
     public Order createOrderService(OrderDTO orderResquest){
         Order order = new Order();
         Optional<User> isUser = userRepository.findById(orderResquest.getUser().getId());
@@ -52,15 +46,18 @@ public class OrderServiceImpl implements OrderService {
                         throw new AvailableProductException("no available item", item.getProductId());
                     }
                 }
+                order.setUser(isUser.get());
                 Cart cart = new Cart();
                 cart.setItems(orderRequestCart);
-                order.setUser(isUser.get());
+                cart.setOrder(order);
+                order.setCart(cart);
                 order.setIsReady(false);
                 order.setOrderDate(LocalDateTime.now());
                 order.setOrderStatus("created");
-                order.setCart(cart);
-                cart.setOrder(order);
-                return orderRepository.save(order);
+                //TODO : add save order
+                return order;
+
+
             }
         }catch (AvailableProductException | OutOfStockException e){
             order.setUser(isUser.get());
