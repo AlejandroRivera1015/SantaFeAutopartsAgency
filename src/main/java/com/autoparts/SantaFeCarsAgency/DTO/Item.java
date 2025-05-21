@@ -1,17 +1,16 @@
-package com.autoparts.SantaFeCarsAgency.DTO.Item;
+package com.autoparts.SantaFeCarsAgency.DTO;
 
 
+import com.autoparts.SantaFeCarsAgency.Entity.Product;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Embeddable
-@ToString
 public class Item {
     private Long productId;
     private Long quantity;
