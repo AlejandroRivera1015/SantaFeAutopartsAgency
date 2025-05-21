@@ -1,6 +1,7 @@
 package com.autoparts.SantaFeCarsAgency.Service.Product;
 
 import com.autoparts.SantaFeCarsAgency.Entity.Product;
+import com.autoparts.SantaFeCarsAgency.Exceptions.Product.OutOfStockException;
 import com.autoparts.SantaFeCarsAgency.Repository.Product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,6 +161,13 @@ public class ProductServiceImpl  implements ProductService {
         }
     }
 
-
-
+    @Override
+    public Boolean stockAvailable(Long productId, Long quantity){
+        try{
+            Optional<Product> stockProduct = productRepository.findById(productId);
+            return stockProduct.get().getQuantity() >= quantity;
+        }catch (Exception e){
+          return false;
+        }
+    }
 }
