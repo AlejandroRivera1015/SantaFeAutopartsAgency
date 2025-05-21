@@ -1,15 +1,10 @@
 package com.autoparts.SantaFeCarsAgency.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -21,22 +16,19 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"name", "email","password","phone","address","orders","role"})
     private User user;
-    @JsonManagedReference
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne
     private Cart  cart;
     private Double totalPrice;
     private Boolean isPaid;
     private Boolean isDelivered;
     private Boolean isReady;
-    private String paymentMethod;
-    private String paymentId;
-    private LocalDateTime orderDate;
-    private LocalDateTime deliveryDate;
-    private String deliveryAddress;
-    private String OrderStatus;
+    private String orderDate;
+    private String deliveryDate;
+
+
+
+
 }

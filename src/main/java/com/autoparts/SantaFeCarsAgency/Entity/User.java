@@ -1,6 +1,5 @@
 package com.autoparts.SantaFeCarsAgency.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,20 +22,8 @@ public class User {
     private String phone;
     private String address;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonBackReference
     private List<Order> orders;
-    private char role;
 
+    private Character role;
 
-    public  User(String email, String password){
-        this.email = email;
-        this.password = password;
-    }
-
-
-    public  User(String email, String password, Character role ){
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 }

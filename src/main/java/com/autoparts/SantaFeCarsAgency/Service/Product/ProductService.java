@@ -18,6 +18,5 @@ public interface ProductService {
     Boolean updateProductAvailability(Long productId, Boolean isAvailable);
     Boolean isProductAvailable(Long id);
     Boolean deleteProduct(Long id);
-    Boolean stockAvailable(Long productId,Long quantity);
 
 }
