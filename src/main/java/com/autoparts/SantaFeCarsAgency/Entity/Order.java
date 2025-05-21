@@ -27,14 +27,16 @@ public class Order {
     @JsonIgnoreProperties({"name", "email","password","phone","address","orders","role"})
     private User user;
     @JsonManagedReference
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Cart  cart;
     private Double totalPrice;
     private Boolean isPaid;
     private Boolean isDelivered;
     private Boolean isReady;
+    private String paymentMethod;
+    private String paymentId;
     private LocalDateTime orderDate;
     private LocalDateTime deliveryDate;
     private String deliveryAddress;
-    private  String OrderStatus;
+    private String OrderStatus;
 }
