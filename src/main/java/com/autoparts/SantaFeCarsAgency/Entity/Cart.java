@@ -1,5 +1,6 @@
 package com.autoparts.SantaFeCarsAgency.Entity;
 import com.autoparts.SantaFeCarsAgency.DTO.Item.Item;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class Cart {
     @ElementCollection
     private List<Item> items;
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "order_id")
     private Order order;
 
