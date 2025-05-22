@@ -5,6 +5,7 @@ import com.autoparts.SantaFeCarsAgency.DTO.Order.OrderDTO;
 import com.autoparts.SantaFeCarsAgency.Entity.Cart;
 import com.autoparts.SantaFeCarsAgency.Entity.Order;
 import com.autoparts.SantaFeCarsAgency.Entity.User;
+import com.autoparts.SantaFeCarsAgency.Exceptions.Order.DeleteOrderException;
 import com.autoparts.SantaFeCarsAgency.Exceptions.Product.AvailableProductException;
 import com.autoparts.SantaFeCarsAgency.Exceptions.Product.OutOfStockException;
 import com.autoparts.SantaFeCarsAgency.Repository.Cart.CartRepository;
@@ -37,13 +38,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrderService(OrderDTO orderResquest){
+    public Order createOrderService(OrderDTO orderRequest) {
         Order order = new Order();
-        Optional<User> isUser = userRepository.findById(orderResquest.getUser().getId());
+        Optional<User> isUser = userRepository.findById(orderRequest.getUser().getId());
 
         try {
-            if(isUser.isPresent()) {
-                List<Item> orderRequestCart = orderResquest.getCart();
+            if (isUser.isPresent()) {
+                List<Item> orderRequestCart = orderRequest.getCart();
                 for (Item item : orderRequestCart) {
                     if (!productService.isProductAvailable(item.getProductId())) {
                         throw new OutOfStockException("out of stock", item.getProductId());
@@ -62,24 +63,43 @@ public class OrderServiceImpl implements OrderService {
                 cart.setOrder(order);
                 return orderRepository.save(order);
             }
-        }catch (AvailableProductException | OutOfStockException e){
+        } catch (AvailableProductException | OutOfStockException e) {
             order.setUser(isUser.get());
             order.setOrderDate(LocalDateTime.now());
             order.setIsReady(false);
 
 
-            if(e instanceof AvailableProductException){
+            if (e instanceof AvailableProductException) {
                 order.setOrderStatus("outStockItems");
-           }
-           if(e instanceof  OutOfStockException){
+            }
+            if (e instanceof OutOfStockException) {
                 order.setOrderStatus("noAvailableItems");
-           }
+
+            }
 
         }
-        finally {
-            return  order;
-        }
+        return order;
 
     }
 
+    @Override
+    public Order deleteOrderService(Long orderId) {
+        Optional<Order> findOrder = orderRepository.findById(orderId);
+
+        try {
+            if (!findOrder.isPresent()) {
+                throw new DeleteOrderException(orderId);
+            }
+            else {
+                orderRepository.delete(findOrder.get());
+                Order validationOrder = findOrder.get();
+                validationOrder.setOrderStatus("deleted");
+                return validationOrder;
+            }
+        }catch(DeleteOrderException e){
+            Order validationOrder = findOrder.get();
+            validationOrder.setOrderStatus("errorDeleting");
+            return validationOrder ;
+            }
+        }
 }
